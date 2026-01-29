@@ -28,9 +28,8 @@ def prompt_user_for_port() -> ListPortInfo:
         i = 0
         for port in ports:
             i += 1
-            port
             Log.info(f"  {i}) {port.device}: {port.description}")
-            
+
         raw_choice = input("\nChoose your port (enter a number): ")
         
         try:
@@ -42,14 +41,14 @@ def prompt_user_for_port() -> ListPortInfo:
     
     return selected_port
 
-def read_from_ser(ser: Serial, encoding) -> str:
-    "Reads a string from the serial port as UTF-8"
+def read_from_ser(ser: Serial, encoding: str) -> str:
+    "Reads a string from the serial port"
     return ser.readline().decode(encoding, errors="replace").strip()
 
-def send_to_ser(ser: Serial, encoding, string: str):
-    "Writes a string to the serial port as UTF-8"
+def send_to_ser(ser: Serial, encoding: str, string: str):
+    "Writes a string to the serial port"
     ser.write(string.encode(encoding, errors="replace"))
-    
+
 def main():
     ser: Serial = None
     parser = build_parser()
