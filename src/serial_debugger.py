@@ -7,23 +7,23 @@ from serial.tools.list_ports_common import ListPortInfo
 
 from log import Log
 from cli import build_parser
-    
+
 def prompt_user_for_port() -> ListPortInfo:
     "Prompts the user until a valid serial port is chosen"
     selected_port: ListPortInfo = None
 
     while selected_port is None:
         ports = comports()
-        
+
         if len(ports) == 0:
             Log.warn_in("No ports found; press any key to rescan...")
             continue
-        
+
         if len(ports) == 1:
             Log.info(f"One port found; automatically connecting to {ports[0].device}")
             selected_port = ports[0]
             break
-        
+
         Log.info("Available ports:\n")
         i = 0
         for port in ports:
@@ -31,14 +31,14 @@ def prompt_user_for_port() -> ListPortInfo:
             Log.info(f"  {i}) {port.device}: {port.description}")
 
         raw_choice = input("\nChoose your port (enter a number): ")
-        
+
         try:
             choice = int(raw_choice)
             selected_port = ports[choice - 1]
         except:
             Log.error("Not a valid number")
             continue
-    
+
     return selected_port
 
 def read_from_ser(ser: Serial, encoding: str) -> str:
@@ -60,32 +60,32 @@ def main():
             ser.close()
         Log.info("Done!")
         exit(0)
-        
+
     def sigquit(signum, frame):
         print("")
         shutdown()
 
     signal(SIGQUIT, sigquit)
-    
+
     def sigint(signum, frame):
         print("")
         if ser is None:
-            Log.warn("Serial port is not initialized")
+            Log.warn("Serial port is not initialized.  If you meant to quit, do <C-\\>.")
             return
-        
+
         message = input("send: ")
         send_to_ser(ser, args.encoding, message)
-    
+
     signal(SIGINT, sigint)
-    
+
     port = prompt_user_for_port()
-        
+
     Log.info(f"Opening serial on {port.device}...")
     try:
         ser = Serial(port.device, baudrate=args.baud, timeout=args.timeout)
-        
+
         Log.info("Success.  Press <C-c> to write a message, and <C-\\> to begin shutdown")
-        
+
         Log.info(f"Listening...")
         while True:
             resp = read_from_ser(ser, args.encoding)
@@ -97,6 +97,6 @@ def main():
         print(ex)
 
     shutdown()
-    
+
 if __name__ == "__main__":
     main()
