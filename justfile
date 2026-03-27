@@ -8,6 +8,6 @@ run *ARGS:
 	./venv/bin/python3 ./src/serial_debugger.py {{ARGS}}
 
 clean:
-	[ ! -d ./venv ] || rm -r ./venv
+	[ ! -d ./venv ] || rm -rf ./venv
 	[ ! -d ./.mypy_cache ] || rm -r ./.mypy_cache
 	[ ! -d ./src/__pycache__ ] || rm -r ./src/__pycache__
