@@ -20,7 +20,7 @@ def prompt_user_for_port() -> ListPortInfo:
             continue
 
         if len(ports) == 1:
-            Log.info(f"One port found; automatically connecting to {ports[0].device}")
+            Log.info(f"One port found; automatically connecting to {ports[0].device} ({ports[0].description})")
             selected_port = ports[0]
             break
 
@@ -47,7 +47,7 @@ def read_from_ser(ser: Serial, encoding: str) -> str:
 
 def send_to_ser(ser: Serial, encoding: str, string: str):
     "Writes a string to the serial port"
-    ser.write(string.encode(encoding, errors="replace"))
+    ser.write((string + "\n").encode(encoding, errors="replace"))
 
 def main():
     ser: Serial = None
@@ -73,7 +73,7 @@ def main():
             Log.warn("Serial port is not initialized.  If you meant to quit, do <C-\\>.")
             return
 
-        message = input("send: ")
+        message = input("---> ")
         send_to_ser(ser, args.encoding, message)
 
     signal(SIGINT, sigint)
@@ -90,7 +90,7 @@ def main():
         while True:
             resp = read_from_ser(ser, args.encoding)
             if (resp.strip() != ""):
-                Log.info("recv: " + resp)
+                Log.info("<--- " + resp)
 
     except Exception as ex:
         Log.error("ERROR connecting to serial device: ")
