@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.0 Sep 30 2026
+
+### Changed
+
+- Migrated to uv for package management
+
 ## 0.0.1 Feb 04 2026
 
 ### Added

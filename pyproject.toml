@@ -1,0 +1,20 @@
+[project]
+name = "serial-debugger"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "C Wiebe", email = "ctwiebe23@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "colorama>=0.4.6",
+    "pyserial>=3.5",
+]
+
+[project.scripts]
+serial-debugger = "serial_debugger:main"
+
+[build-system]
+requires = ["uv_build>=0.12.21,<0.13.0"]
+build-backend = "uv_build"
